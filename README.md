@@ -14,7 +14,7 @@ The kata requires providing **a service API and its underlying implementation**,
 | US2 | As a customer, I want to make a **withdrawal** from my account | To access some or all of my savings |
 | US3 | As a customer, I want to view my transaction **history** (transaction type, date, amount, balance) | To check my transactions |
 
-#
-#
+<br><br><br><br>
+
 <div align="right" style="color: gray;">Produced by D.A</div>   
  
