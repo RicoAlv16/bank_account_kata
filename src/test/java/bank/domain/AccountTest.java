@@ -7,6 +7,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class AccountTest {
 
+    // Unit test for deposit
+
     @Test
     void should_increase_balance_when_making_a_deposit() {
         // Given: an account with an initial balance of 0
@@ -64,7 +66,71 @@ class AccountTest {
         account.deposit(new BigDecimal("1000.00"));
         account.deposit(new BigDecimal("500.50"));
 
-        //  Then: deposit must be 1500.50
+        //  Then: balance must be 1500.50
         assertThat(account.getBalance()).isEqualByComparingTo("1500.50");
+    }
+
+    // Unit test for withdrawal
+
+    @Test
+    void should_decrease_balance_when_making_a_withdrawal() {
+        // Given: a decrease of the balance after withdrawal
+        Account account = new Account();
+        account.deposit(new BigDecimal("1000.00")); // You need to have money before withdrawing.
+        BigDecimal withdrawalAmount = new BigDecimal("400.00");
+
+        // When: 400 is withdrawn
+        account.withdraw(withdrawalAmount);
+
+        //  Then: balance must be 600
+        assertThat(account.getBalance()).isEqualByComparingTo("600.00");
+    }
+
+    @Test
+    void should_reject_withdrawal_when_amount_is_negative() {
+        // Given: a withdrawal on negative balance
+        Account account = new Account();
+        BigDecimal negativeAmount = new BigDecimal("-50.00");
+
+        // When: -50 would be withdrawn and then: withdrawal is rejected
+        assertThatThrownBy(() -> account.withdraw(negativeAmount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Withdrawal amount must be positive");
+    }
+
+    @Test
+    void should_reject_withdrawal_when_amount_is_zero() {
+        // Given: a withdrawal of 0
+        Account account = new Account();
+        BigDecimal zeroAmount = BigDecimal.ZERO;
+
+        // When: 0 would be withdrawn and then: withdrawal is rejected
+        assertThatThrownBy(() -> account.withdraw(zeroAmount))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Withdrawal amount must be positive");
+    }
+
+    @Test
+    void should_reject_withdrawal_when_amount_is_null() {
+        // Given: a withdrawal of "null" amount
+        Account account = new Account();
+
+        // When: null would be withdrawal and then: withdrawal is rejected
+        assertThatThrownBy(() -> account.withdraw(null))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Withdrawal amount must be positive");
+    }
+
+    @Test
+    void should_reject_withdrawal_when_balance_is_insufficient() {
+        // Given: a withdrawal a highest amount for insufficient balance
+        Account account = new Account();
+        account.deposit(new BigDecimal("100.00"));
+        BigDecimal highAmount = new BigDecimal("150.00");
+
+        // When: 150 would be withdrawn for 100 in the balance and then: withdrawal is rejected for insufficient balance
+        assertThatThrownBy(() -> account.withdraw(highAmount))
+                .isInstanceOf(InsufficientBalanceException.class)
+                .hasMessage("Insufficient balance for this withdrawal");
     }
 }
