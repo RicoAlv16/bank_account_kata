@@ -1,4 +1,4 @@
-package bank.api;
+package bank.domain;
 
 import java.time.LocalDateTime;
 

@@ -52,6 +52,15 @@ The project was developed using a strict **TDD (Test-Driven Development)** appro
 
 ---
 
+## Architectural Evolution & Refactoring (V2 – DDD Alignment)
+
+Previously designed with distributed validation and external temporal orchestration, the codebase underwent a major architectural overhaul to meet the standards of a highly secure banking application:
+
+1. **Value Object Pattern (`Amount`)** : Centralization of initial checks for financial flows. The `Account` entity no longer validates the format or raw consistency of the amount; instead, it receives an `Amount` object whose validity is contractually guaranteed by Java's type system.
+2. **Immutability and Encapsulation** : Definition of strict financial thresholds managed directly within the domain (deposit/withdrawal floor of 10.00; ceiling of 1000,000.00).
+3. **Resilience Against Temporal Vulnerabilities** : Removal of `LocalDateTime` parameters from execution signatures. The domain entity encapsulates its own `Clock`, preventing any attempts at backdating or tampering with transaction logs from outside the application.
+4. **Clean Architectural Testing (Given-When-Then)** : Clarification of the unit test suite, restructured according to the components' actual responsibilities. Eliminating redundant validation logic ensures optimal long-term code maintainability.
+
 ## Installation and Execution
 
 ### Prerequisites
